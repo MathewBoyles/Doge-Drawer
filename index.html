@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!--link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700' rel='stylesheet' type='text/css'-->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/reset.css"> <!-- CSS reset -->
+  <link rel="stylesheet" href="css/style.css"> <!-- Resource style -->
+  <script src="js/modernizr.js"></script> <!-- Modernizr -->
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+
+  <title>Doge Drawer | Dogeville</title>
+</head>
+<body>
+<div id="loading">
+  <div>Loading...</div>
+</div>
+<div id="flash"></div>
+<div class="btn-group" id="modes">
+  <div id="mode" class="btn btn-success"><span>View</span> mode</div>
+  <button type="button" class="btn btn-success" id="viewMode"><img src="img/icons/view.svg"></button>
+  <button type="button" class="btn btn-success" id="drawMode"><img src="img/icons/draw.svg"></button>
+  <button type="button" class="btn btn-success" id="eraseMode"><img src="img/icons/erase.svg"></button>
+</div>
+<div class="btn-group" id="capture">
+  <button type="button" class="btn btn-success" id="captureFrame"><img src="img/icons/camera.svg"></button>
+  <button type="button" class="btn btn-success btn-frames" id="captureFrames">0</button>
+  <button type="button" class="btn btn-success" id="captureDownload"><img src="img/icons/download.svg"></button>
+</div>
+<header>
+  <nav class="cd-stretchy-nav add-content">
+    <a class="cd-nav-trigger" href="#0">
+      <span aria-hidden="true"></span>
+    </a>
+    <ul>
+      <li><a href="#0" class="cd-setbackground"><span>Background</span></a></li>
+      <li><a href="#0" class="cd-setbrush"><span>Brush</span></a></li>
+      <li><a href="#0" class="cd-texttool"><span>Text</span></a></li>
+      <li><a href="#0" class="cd-creategif"><span>GIF</span></a></li>
+      <li><a href="#0" class="cd-download"><span>Download</span></a></li>
+      <li><a href="#0" class="cd-more"><span>More</span></a></li>
+    </ul>
+    <span aria-hidden="true" class="stretchy-nav-bg"></span>
+  </nav>
+</header>
+<div id="container">
+  <main class="cd-main-content">
+    <img src="img/logo-linkd.png" id="logo">
+  </main>
+</div>
+<div class="modal fade" id="framesModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">GIF frames</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row" id="framesPlate"></div>
+      </div>
+      <div class="modal-body">
+        <div id="frameInterval_wrap">
+          <label for="frameInterval">Frame interval (time per frame)</label>
+          <select class="form-control" id="frameInterval">
+            <option value="0.1" selected>0.1 seconds</option>
+            <option value="0.2">0.2 seconds</option>
+            <option value="0.5">0.5 seconds</option>
+            <option value="1.0">1.0 second</option>
+            <option value="1.5">1.5 seconds</option>
+            <option value="2.0">2.0 seconds</option>
+            <option value="2.5">2.5 seconds</option>
+            <option value="3.0">3.0 seconds</option>
+            <option value="5.0">5.0 seconds</option>
+          </select>
+        </div>
+        <button class="btn btn-block btn-success btn-lg" id="gifCreate">Generate</button>
+        <p class="text-center text-muted">Please note: You will be unable to use Doge Drawer until your GIF has been generated. Generation times vary.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="textColor" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Text color and font</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row" id="textPlate"></div>
+        <div class="row" id="fontPlate"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="backgroundSelection" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Background</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row" id="colorPlate"></div>
+        <div>
+          <div class="input-group">
+            <input type="file" class="form-control" accept="image/*">
+            <span class="input-group-btn">
+              <button class="btn btn-default">Set!</button>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="brushSelection" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Brush</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row" id="brushPlate"></div>
+        <div id="brushSize_wrap">
+          <label for="brushSize">Brush size</label>
+          <input type="range" class="form-control" id="brushSize" min="10" max="1000" value="200">
+        </div>
+        <div id="brushOpacity_wrap">
+          <label for="brushOpacity">Brush opacity</label>
+          <input type="range" class="form-control" min="0" max="100" value="100" id="brushOpacity">
+        </div>
+        <div id="brushRadius_wrap">
+          <label for="brushRadius">Brush border radius</label>
+          <input type="range" class="form-control" min="0" max="100" value="0" id="brushRadius">
+        </div>
+        <div>
+          <div class="input-group">
+            <input type="file" class="form-control" accept="image/*">
+            <span class="input-group-btn">
+              <button class="btn btn-default">Set!</button>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+      <div class="modal-footer" id="demoBrush">
+        <img src="img/transparent-tick.png">
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="downloadModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Download creation!</h4>
+      </div>
+      <div class="modal-body">
+        <a href="" target="_blank" class="thumbnail" download>
+          <img src="img/transparent.png">
+        </a>
+        <a href="" target="_blank" class="btn btn-block btn-success btn-lg" download>Download</a>
+        <p class="text-center text-muted">If the button above does not work, please right-click the image above and click "Save image" (or the equivalent).</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+  <div class="text-center text-muted">
+    <p>Please ensure you have obtained the required rights to distribute any custom images used in your creation.</p>
+  </div>
+</div>
+<div class="modal fade" id="errorModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Oops</h4>
+      </div>
+      <div class="modal-body"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="textToolModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Text tool commands</h4>
+      </div>
+      <table class="table">
+        <tbody>
+          <tr>
+            <th scope=row><button class="btn btn-danger btn-block btn-success">Edit</button></th>
+            <td>To edit the text, click the element and then type.</td>
+          </tr>
+          <tr>
+            <th scope=row><button class="btn btn-danger btn-block btn-success">Color</button></th>
+            <td>Double-click the text to open the text color selector.</td>
+          </tr>
+          <tr>
+            <th scope=row><button class="btn btn-danger btn-block btn-success">Font</button></th>
+            <td>Double-click the text to open the text font selector.</td>
+          </tr>
+          <tr>
+            <th scope=row><button class="btn btn-danger btn-block btn-success">Move</button></th>
+            <td>You may move the text by clicking and holding down on it, then drag it it its new home.<td>
+          </tr>
+          <tr>
+            <th scope=row><button class="btn btn-danger btn-block btn-success">Resize</button></th>
+            <td>Use your mouse's scroll wheel to resize your text.</td>
+          </tr>
+          <tr>
+            <th scope=row><button class="btn btn-danger btn-block btn-success">Rotate</button></th>
+            <td>Use the UP arrow key to rotate the text clockwise, and DOWN for anti-clockwise.</td>
+          </tr>
+          <tr>
+            <th scope=row><button class="btn btn-danger btn-block btn-success">Remove</button></th>
+            <td>You may either right-click the text, or remove all text in the element to remove it.</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="modesModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Modes</h4>
+      </div>
+      <table class="table">
+        <tbody>
+          <tr>
+            <th scope=row><button class="btn btn-danger btn-block btn-success">View mode</button></th>
+            <td>In this mode, your brush is off and the eraser away. You are simply admiring your masterpiece. Press <em>V</em> on your keyboard to use this mode.</td>
+          </tr>
+          <tr>
+            <th scope=row><button class="btn btn-danger btn-block btn-success">Draw mode</button></th>
+            <td>Draw away. Move your cursor around to draw. Press <em>D</em> on your keyboard to use this mode, or left-click within the canvas to toggle.</td>
+          </tr>
+          <tr>
+            <th scope=row><button class="btn btn-danger btn-block btn-success">Erase mode</button></th>
+            <td>Undo. Move your mouse around to remove items under the cursor. Press <em>E</em> on your keyboard to use this mode, or right-click within the canvas to toggle.</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="moreModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">More</h4>
+      </div>
+      <table class="table">
+        <tbody>
+          <tr>
+            <th scope=row><button class="btn btn-danger btn-block" id="clearCreation">Clear creation</button></th>
+            <td>Clear the canvas to begin your creation again. Please save creation first.</td>
+          </tr>
+          <tr>
+            <th scope=row><button class="btn btn-danger btn-block" id="snakeAway">Snake away</button></th>
+            <td>Not only will this clear your creation, but it will do so as a snake! This feature will also change the background according the background used at the brush point being erashed. Please save creation first.</td>
+          </tr>
+          <tr>
+            <th scope=row><button class="btn btn-danger btn-block" id="clearCache">Clear cache</button></th>
+            <td>Remove all custom images saved in Doge Drawer. This feature will also clear your creations. Please save creation first.</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="modal-body">
+        <p>Doge Drawer was designed and created by <a href="http://dogeville.net/" target="_blank">Dogeville.net</a>.</p>
+        <p>Special thanks to...</p>
+        <ul>
+          <li><a href="https://getbootstrap.com/" target="_blank">Bootstrap</a></li>
+          <li><a href="https://codyhouse.co/" target="_blank">CodyHouse</a></li>
+          <li><a href="https://yahoo.github.io/gifshot/" target="_blank">gifshot</a></li>
+          <li><a href="https://goo.gl/mQENuD" target="_blank">Google</a></li>
+          <li><a href="https://www.google.com/fonts" target="_blank">Google Fonts</a></li>
+          <li><a href="https://html2canvas.hertzen.com/" target="_blank">html2canvas</a></li>
+          <li><a href="https://jquery.com/" target="_blank">jQuery</a></li>
+          <li><a href="https://jqueryui.com/" target="_blank">jQuery UI</a></li>
+          <li><a href="https://www.maxcdn.com/" target="_blank">MaxCDN</a></li>
+          <li><a href="https://modernizr.com/" target="_blank">Modernizr</a></li>
+          <li><a href="https://www.reddit.com/r/dogecoin/comments/213lnp/update_dogecoin_transparent_png_archive_needs/" target="_blank">Reddit</a></li>
+        </li>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/html" id="colorTemplate">
+  <div class="col-xs-6 col-md-3">
+    <a href="#" class="thumbnail">
+      <img src="img/transparent.png">
+    </a>
+  </div>
+</script>
+<script type="text/html" id="fontTemplate">
+  <div class="col-xs-6 col-md-6 text-center">
+    <h4>Sample text</h4>
+  </div>
+</script>
+<script src="js/jquery-2.1.4.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script src="js/html2canvas.js"></script>
+<script src="js/gifshot.min.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
